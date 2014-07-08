@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox spacing="2.0">
+         <children>
+            <Button mnemonicParsing="false" text="voegtoe" />
+            <TextField text="naam" />
+         </children>
+      </HBox>
+      <TreeView prefHeight="200.0" prefWidth="200.0" />
+      <HBox alignment="CENTER_RIGHT" spacing="5.0">
+         <children>
+            <Label maxWidth="1.7976931348623157E308" prefWidth="243.0" text="opmerking" />
+            <Button mnemonicParsing="false" text="start" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>
