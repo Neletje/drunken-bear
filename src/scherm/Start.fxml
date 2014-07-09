@@ -8,19 +8,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scherm.StartController">
    <children>
       <HBox spacing="2.0">
          <children>
-            <Button mnemonicParsing="false" text="voegtoe" />
-            <TextField text="naam" />
+            <Button fx:id="voegtoeButton" mnemonicParsing="false" onAction="#voegtoe" text="voegtoe" />
+            <TextField fx:id="naamField" promptText="naam" />
          </children>
       </HBox>
-      <TreeView prefHeight="200.0" prefWidth="200.0" />
+      <TreeView fx:id="view" prefHeight="200.0" prefWidth="200.0" />
       <HBox alignment="CENTER_RIGHT" spacing="5.0">
          <children>
-            <Label maxWidth="1.7976931348623157E308" prefWidth="243.0" text="opmerking" />
-            <Button mnemonicParsing="false" text="start" />
+            <Label fx:id="opmLabel" maxWidth="1.7976931348623157E308" prefWidth="243.0" text="opmerking" />
+            <Button fx:id="startButton" mnemonicParsing="false" onAction="#start" text="start" />
          </children>
       </HBox>
    </children>

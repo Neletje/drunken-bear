@@ -71,6 +71,18 @@ public enum Ronde {
     public int getNummer() {
         return nummer;
     }
+
+    @Override
+    public String toString() {
+        return "Ronde " + nummer;
+    }
+
+    public String getRegel() {
+        return regel;
+    }
+    
+    
+    
     
     public abstract Ronde volgende();
     public abstract boolean hasVolgende();

@@ -9,12 +9,16 @@ import exceptions.GameBezigException;
 import exceptions.OngeldigSpelException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.InvalidationListener;
+import luisteraar.Onderwerp;
+import luisteraar.mijnLuisteraar;
+import luisteraar.mijnObserver;
 
 /**
  *
  * @author Ellen
  */
-public class Model {
+public class Model implements mijnObserver{
 
     private static final Model model = new Model();
 
@@ -32,7 +36,7 @@ public class Model {
 
     public static final int KAARTJESPP = 3;
 
-    public Model() {
+    private Model() {
         newGame();
     }
 
@@ -56,6 +60,9 @@ public class Model {
         if (spelers.size() % 2 == 1) {
             punten.add(new RondePunten());
         }
+        
+        invalidate(Onderwerp.SPELERS_ADD);
+        
     }
 
     public List<Kaartje> getKaartjes() {
@@ -119,6 +126,7 @@ public class Model {
         if(!ronde.hasVolgende())
             throw new OngeldigSpelException("geen volgende ronde beschikbaar");
         ronde = ronde.volgende();
+        invalidate(Onderwerp.RONDE_VOLGENDE);
     }
 
     public void print() {
@@ -175,4 +183,36 @@ public class Model {
 
         return true;
     }
+
+    
+    private List<mijnLuisteraar> luisteraars = new ArrayList<mijnLuisteraar>();
+    private List<Onderwerp> onderwerpen = new ArrayList<Onderwerp>();
+    
+    @Override
+    public void addLuisteraar(mijnLuisteraar luisteraar, Onderwerp onderwerp) {
+        luisteraars.add(luisteraar);
+        onderwerpen.add(onderwerp);
+
+    
+    }
+
+    @Override
+    public void removeLuisteraar(mijnLuisteraar luisteraar, Onderwerp onderwerp) {
+        int i=luisteraars.indexOf(luisteraar);
+        onderwerpen.remove(i);
+        luisteraars.remove(i);
+    }
+    
+    private void invalidate(Onderwerp onderwerp){
+        for(int i=0;i<luisteraars.size();i++){
+            if(onderwerpen.get(i)==onderwerp){
+                luisteraars.get(i).invalidate(this, onderwerp);
+            }
+        }
+    }
+    
+    
+    
+    
+   
 }

@@ -9,17 +9,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="435.0" spacing="40.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+      prefHeight="486.0" prefWidth="435.0" spacing="40.0" xmlns="http://javafx.com/javafx/8" 
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="scherm.SpelController">
    <children>
-      <Label text="RONDE 1" />
-      <Label text="speler1 voor speler2" />
-      <Label text="de regels van deze ronde" />
-      <Label text="Woord" />
-      <Label text="30:00" />
+      <Label fx:id="ronde" text="RONDE 1" />
+      <Label fx:id="voor" text="speler1 voor speler2" />
+      <Label fx:id="regel" text="de regels van deze ronde" />
+      <StackPane>
+         <children>
+            <Label fx:id="woord" text="Woord" />
+            <Button fx:id="startbutton" mnemonicParsing="false" onAction="#start" text="start" />
+         </children>
+      </StackPane>
+      <Label fx:id="tijd" text="30:00" />
       <HBox alignment="CENTER" spacing="40.0">
          <children>
-            <Button mnemonicParsing="false" text="ok" />
-            <Button mnemonicParsing="false" text="vals" />
+            <Button fx:id="okbutton" mnemonicParsing="false" onAction="#okgeklikt" text="ok" />
+            <Button fx:id="valsbutton" mnemonicParsing="false" onAction="#valsgeklikt" text="vals" />
          </children>
       </HBox>
    </children>

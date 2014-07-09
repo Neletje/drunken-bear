@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scherm;
 
+import inhoud.Model;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,13 +14,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import spel.Spel;
 
 /**
  * FXML Controller class
  *
  * @author Ellen
  */
-public class KaderController implements Initializable {
+public class KaderController implements Initializable, InvalidationListener {
 
     @FXML
     private MenuItem pauze;
@@ -51,6 +50,7 @@ public class KaderController implements Initializable {
         centrum.getChildren().add(stat);
         delen = new Parent[]{spel, start, stat};
         maakZichtbaar(start);
+        Spel.getInstance().addListener(this);
 
     }
 
@@ -92,12 +92,35 @@ public class KaderController implements Initializable {
 
     @FXML
     private void helpen(ActionEvent event) {
+        Model.getInstance().print();
         System.out.println("helpen");
     }
 
     @FXML
     private void informeren(ActionEvent event) {
         System.out.println("info");
+    }
+
+    @Override
+    public void invalidated(Observable observable) {
+        switch(Spel.getInstance().getStatus()){
+            case START: 
+                maakZichtbaar(start);
+                break;
+            case PAUZE: 
+                maakZichtbaar(stat);
+                break;
+            case RONDE: 
+                maakZichtbaar(spel);
+                break;
+            case KLAAR: 
+                maakZichtbaar(stat);
+                break;
+            default:
+                maakZichtbaar(null);
+        }
+        
+
     }
 
 }
