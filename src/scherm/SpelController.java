@@ -6,15 +6,22 @@
 package scherm;
 
 import exceptions.GameBezigException;
+import exceptions.OngeldigSpelException;
+import inhoud.Kaartje;
 import inhoud.Model;
 import inhoud.Ronde;
+import inhoud.RondePunten;
 import java.net.URL;
+import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,13 +31,15 @@ import luisteraar.Onderwerp;
 import luisteraar.mijnLuisteraar;
 import luisteraar.mijnObserver;
 import scherm.spel.TimerModel;
+import spel.Spel;
+import spel.Status;
 
 /**
  * FXML Controller class
  *
  * @author Ellen
  */
-public class SpelController implements Initializable, mijnLuisteraar {
+public class SpelController implements Initializable, mijnLuisteraar,InvalidationListener {
 
     @FXML
     private Label ronde;
@@ -56,6 +65,10 @@ public class SpelController implements Initializable, mijnLuisteraar {
 
     private TimerModel timerModel;
     private String s;
+    private List<Kaartje> kaartjes;
+    private Kaartje  huidigKaartje;
+    private Random random;
+    private RondePunten p;
 
     /**
      * Initializes the controller class.
@@ -63,6 +76,7 @@ public class SpelController implements Initializable, mijnLuisteraar {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Model.getInstance().addLuisteraar(this, Onderwerp.RONDE_VOLGENDE);
+        Spel.getInstance().addListener(this);
         invalidate(null, Onderwerp.RONDE_VOLGENDE);
         
         t = new Timer(true);
@@ -86,10 +100,12 @@ public class SpelController implements Initializable, mijnLuisteraar {
                 });
             }
         }, 0);
-
+       
 
     }
 
+    private int tellerPunten;
+    
     @FXML
     private void start(ActionEvent event) {
         initTimerDeel();
@@ -98,11 +114,33 @@ public class SpelController implements Initializable, mijnLuisteraar {
         okbutton.setDisable(false);
         valsbutton.setDisable(false);
         timerModel.setSpelBezig(true);
-
+        tellerPunten=0;
+        kieskaartje();
     }
 
     @FXML
     private void okgeklikt(ActionEvent event) {
+        if(huidigKaartje!=null){
+        tellerPunten++;
+        }
+        kaartjes.remove(huidigKaartje);
+        if(kaartjes.size()>0){
+            kieskaartje();
+        }else{
+            huidigKaartje=null;
+            //ronde gedaan
+            System.out.println("ronde gedaan");
+            cancel();
+            volgende();
+            Spel.getInstance().setStatus(Status.PAUZE);
+            try {
+                Model.getInstance().volgenderonde();
+            } catch (OngeldigSpelException ex) {
+                System.err.println(ex);
+            }
+        }
+        
+        
 
     }
 
@@ -110,11 +148,15 @@ public class SpelController implements Initializable, mijnLuisteraar {
     private void valsgeklikt(ActionEvent event) {
         System.out.println("cancel");
 
+        cancel();
+        volgende();
+    }
+
+    private void cancel() {
         task.cancel();
         for (int i = 0; i < TIME; i++) {
             tasklist[i].cancel();
         }
-        volgende();
     }
 
     @Override
@@ -123,6 +165,7 @@ public class SpelController implements Initializable, mijnLuisteraar {
             Ronde r = Model.getInstance().getRonde();
             ronde.setText(r.toString());
             regel.setText(r.getRegel());
+            kaartjes=Model.getInstance().getKaartjes();
         } else if (onderwerp == Onderwerp.TIMER_KLAAR) {
             if (!timerModel.isSpelBezig()) {
                 startbutton.setVisible(true);
@@ -172,7 +215,6 @@ public class SpelController implements Initializable, mijnLuisteraar {
 
     private void herstart() {
         voor.setText(s);
-        woord.setText("!");
         startbutton.setVisible(true);
         startbutton.setDisable(false);
         okbutton.setDisable(true);
@@ -181,7 +223,13 @@ public class SpelController implements Initializable, mijnLuisteraar {
     }
 
     private void volgende() {
-
+        //bij cheat dus niet ;)
+        if(tellerPunten>0){
+           p=Model.getInstance().getPunten( Model.getInstance().getHuidigeSpeler());
+           p.addPunten(Model.getInstance().getRonde(), tellerPunten);
+        }
+        
+        
         try {
             //volgende speler oproepen
             Model.getInstance().volgendeSpeler();
@@ -194,6 +242,28 @@ public class SpelController implements Initializable, mijnLuisteraar {
 
         herstart();
 
+    }
+
+    @Override
+    public void invalidated(Observable observable) {
+        Spel spel = (Spel) observable;
+        if(spel.getStatus()==Status.RONDE){
+            kaartjes = Model.getInstance().getKaartjes();
+            random = new Random();
+        }
+    
+    }
+
+    private void kieskaartje() {
+        if(kaartjes.size()>1){
+        huidigKaartje = kaartjes.get(random.nextInt(kaartjes.size()));
+        woord.setText(huidigKaartje.getWoord());
+        }else if(kaartjes.size()==1){
+            huidigKaartje = kaartjes.get(0);
+            woord.setText(huidigKaartje.getWoord());
+        }
+        
+        
     }
 
 }
