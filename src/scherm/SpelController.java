@@ -17,8 +17,6 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -133,11 +131,6 @@ public class SpelController implements Initializable, mijnLuisteraar,Invalidatio
             cancel();
             volgende();
             Spel.getInstance().setStatus(Status.PAUZE);
-            try {
-                Model.getInstance().volgenderonde();
-            } catch (OngeldigSpelException ex) {
-                System.err.println(ex);
-            }
         }
         
         

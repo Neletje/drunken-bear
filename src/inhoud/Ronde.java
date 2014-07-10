@@ -25,7 +25,7 @@ public enum Ronde {
     TWEE (2, "1 woord"){
         @Override
         public Ronde volgende(){
-            return Ronde.TWEE;
+            return Ronde.DRIE;
         }
         
         @Override
@@ -36,12 +36,12 @@ public enum Ronde {
     DRIE(3, "uitbeelden") {
         @Override
         public Ronde volgende(){
-            return Ronde.DRIE;
+            return Ronde.UITSLAG;
         }
         
         @Override
         public boolean hasVolgende(){
-            return true;
+            return false;
         }
     }, 
     UITSLAG(4, null) {

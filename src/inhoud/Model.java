@@ -125,6 +125,7 @@ public class Model implements mijnObserver{
     public void volgenderonde() throws OngeldigSpelException {
         if(!ronde.hasVolgende())
             throw new OngeldigSpelException("geen volgende ronde beschikbaar");
+        System.out.println("====VOLGENDE RONDE==== ");
         ronde = ronde.volgende();
         invalidate(Onderwerp.RONDE_VOLGENDE);
     }
