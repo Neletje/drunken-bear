@@ -157,8 +157,8 @@ public class Model implements mijnObserver{
         }
     }
 
-    public void getHuidigeSpeler() {
-        spelers.get(huidigeSpeler);
+    public Speler getHuidigeSpeler() {
+        return spelers.get(huidigeSpeler);
     }
 
     public void startSpel() throws GameBezigException, OngeldigSpelException {

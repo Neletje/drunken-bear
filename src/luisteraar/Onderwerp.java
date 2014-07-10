@@ -14,6 +14,6 @@ public enum Onderwerp {
     SPELERS_ADD,
     
     KAARTJES_EDIT,
-    
+    TIMER_KLAAR,
     RONDE_VOLGENDE;
 }
